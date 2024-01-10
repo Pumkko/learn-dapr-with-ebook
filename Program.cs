@@ -1,6 +1,7 @@
 ﻿using Dapr.Client;
 
-// Failed when the Store had an uppercase
+// Failed when the Store had an uppercase, now i know why, 
+// statestore refers to the default store defined in C:\Users\Puma\.dapr\components\statestore.yaml
 const string storeName = "statestore";
 const string key = "counter";
 
