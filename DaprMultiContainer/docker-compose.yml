@@ -7,13 +7,12 @@ services:
    context: .
    dockerfile: MyFrontEnd/Dockerfile
   ports:
-   - "51000:50001"
+   - "51000:50001" 
  myfrontend-dapr: 
   image: "daprio/daprd:latest" 
-  command: [ "./daprd", "-app-id", "MyFrontEnd", "-app-port", "8080" ] 
-  depends_on:
-   - myfrontend
+  command: [ "./daprd", "-app-id", "MyFrontEnd", "-app-port", "8080" ]
   network_mode: "service:myfrontend"
+
  mybackend:
   image: ${DOCKER_REGISTRY-}mybackend
   build:
