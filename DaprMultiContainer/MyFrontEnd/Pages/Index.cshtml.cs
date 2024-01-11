@@ -9,7 +9,7 @@ namespace MyFrontEnd.Pages
 
         public async Task OnGet()
         {
-            var forecasts = await daprClient.InvokeMethodAsync<IEnumerable<WeatherForecast>>(HttpMethod.Get, "MyBackend", "weatherForecast");
+            var forecasts = await daprClient.InvokeMethodAsync<IEnumerable<WeatherForecast>>(HttpMethod.Get, "MyBackEnd", "WeatherForecast");
             ViewData["WeatherForecastData"] = forecasts;
         }
     }
