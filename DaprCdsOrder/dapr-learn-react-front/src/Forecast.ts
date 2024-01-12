@@ -1,12 +1,28 @@
-import { TFixedArray } from "./types";
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import { ApiForecast, ApiForecastRow } from "./ApiModel";
+import { v4 } from 'uuid'
 
-// Hardcoded because it helps typescript check boundaries
-type TForecast = TFixedArray<number, 12>
 
-export interface Forecast {
-    artistName: string;
-    costume: string;
-    forecasts: TForecast;
+export function useApiForecast() {
+    return useQuery({
+        queryKey: ["forecasts"],
+        queryFn: async () => {
+            const { data } = await axios.get<ApiForecast[]>("https://localhost:7120/Forecast");
+            for (const forecast of data) {
+                for (let i = 0; i < 12; i++) {
+                    if (forecast.forecastsRow[i] === undefined) {
+                        forecast.forecastsRow[i] = {
+                            month: i,
+                            forecastValue: 0,
+                            id: v4(),
+                            forecastId: forecast.id
+                        } satisfies ApiForecastRow
+                    }
+                }
+            }
+
+            return data;
+        }
+    })
 }
-
-export const getDefaultForecasts: () => TForecast = () => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
