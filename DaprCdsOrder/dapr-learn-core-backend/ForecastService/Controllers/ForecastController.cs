@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForecastService.Controllers
 {
@@ -10,20 +11,20 @@ namespace ForecastService.Controllers
         [HttpGet]
         public IEnumerable<Forecast> Get()
         {
-            return forecastDbContext.Forecasts.ToList();
+            return forecastDbContext.Forecasts.Include(f => f.ForecastsRow).ToList();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Forecast forecast)
+        [HttpPost("ForecastRow")]
+        public async Task<IActionResult> Post([FromBody] ForecastRow forecast)
         {
-            var existingForecast = forecastDbContext.Forecasts.SingleOrDefault(f => f.Id == forecast.Id);
+            var existingForecast = forecastDbContext.ForecastsRows.SingleOrDefault(f => f.Id == forecast.Id);
 
             if (existingForecast != null)
             {
                 existingForecast.ForecastValue = forecast.ForecastValue;
             }else
             {
-                forecastDbContext.Forecasts.Add(forecast);
+                forecastDbContext.ForecastsRows.Add(forecast);
             }
 
             await forecastDbContext.SaveChangesAsync();

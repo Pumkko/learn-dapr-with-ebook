@@ -10,9 +10,6 @@ namespace ForecastService
 
         public required string Costume { get; set; }
 
-        [Range(0, 11)]
-        public required int Month { get; set; }
-
-        public required int ForecastValue { get; set; }
+        public required IEnumerable<ForecastRow> ForecastsRow { get; set; }
     }
 }

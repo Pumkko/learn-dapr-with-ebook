@@ -4,6 +4,7 @@ using ForecastService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForecastService.Migrations
 {
     [DbContext(typeof(ForecastDbContext))]
-    partial class ForecastDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240112163621_SplitForecastWithForecastRow")]
+    partial class SplitForecastWithForecastRow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

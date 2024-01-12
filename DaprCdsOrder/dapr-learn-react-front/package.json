@@ -10,11 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.17.9",
+    "@types/uuid": "^9.0.7",
     "ag-grid-community": "^31.0.1",
     "ag-grid-react": "^31.0.1",
+    "axios": "^1.6.5",
     "install": "^0.13.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
