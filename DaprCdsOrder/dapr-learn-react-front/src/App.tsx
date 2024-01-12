@@ -1,28 +1,77 @@
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
+import { ColDef } from "ag-grid-community"
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 import { useState } from 'react';
+import { Forecast, getDefaultForecasts } from './Forecast';
+import { TFixedArray } from './types';
 
+type ForecastColDef = ColDef<Forecast>;
+
+function monthsList() {
+  const format = new Intl
+    .DateTimeFormat('en', { month: 'long' }).format;
+
+  return [...Array(12).keys()]
+    .map((index) => format(new Date(Date.UTC(2024, index + 1))));
+}
+
+
+function getForecastMonthlyColDef(): TFixedArray<ForecastColDef, 12> {
+
+  const forecastColDef: ForecastColDef[] = []
+
+  const months = monthsList();
+
+  for (let i = 0; i < 12; i++) {
+    forecastColDef.push({
+      colId: `month-${i}`,
+      valueGetter: (params) => {
+        return params.data?.forecasts[i] ?? 0
+      },
+      headerName: months[i]
+    });
+  }
+
+  return forecastColDef as TFixedArray<ForecastColDef, 12>
+}
 
 function App() {
-
   // Row Data: The data to be displayed.
-  const [rowData, setRowData] = useState([
-    { mission: "Voyager", company: "NASA", location: "Cape Canaveral", date: "1977-09-05", rocket: "Titan-Centaur ", price: 86580000, successful: true },
-    { mission: "Apollo 13", company: "NASA", location: "Kennedy Space Center", date: "1970-04-11", rocket: "Saturn V", price: 3750000, successful: false },
-    { mission: "Falcon 9", company: "SpaceX", location: "Cape Canaveral", date: "2015-12-22", rocket: "Falcon 9", price: 9750000, successful: true }
+  const [rowData] = useState<Forecast[]>([
+    {
+      artistName: "Dupont",
+      costume: "Three piece suit",
+      forecasts: getDefaultForecasts()
+    },
+    {
+      artistName: "Rick",
+      costume: "White lab coat",
+      forecasts: getDefaultForecasts()
+    },
+    {
+      artistName: "Cuphead",
+      costume: "Cup",
+      forecasts: getDefaultForecasts()
+    }
   ]);
 
-  // Column Definitions: Defines & controls grid columns.
-  const [colDefs, setColDefs] = useState([
-    { field: "mission" },
-    { field: "company" },
-    { field: "location" },
-    { field: "date" },
-    { field: "price" },
-    { field: "successful" },
-    { field: "rocket" }
-  ]);
+  const [defaultColDef] = useState<ColDef>({
+    flex: 1
+  })
+
+  const [colDef] = useState<ForecastColDef[]>([
+    {
+      colId: "artistName",
+      field: "artistName"
+    },
+    {
+      colId: "costume",
+      field: "costume"
+    },
+    ...getForecastMonthlyColDef()
+  ]
+  )
 
   return (
     <>
@@ -31,7 +80,7 @@ function App() {
       </h1>
       <div className="ag-theme-quartz" style={{ height: 500 }}>
         {/* The AG Grid component */}
-        <AgGridReact rowData={rowData} columnDefs={colDefs} />
+        <AgGridReact rowData={rowData} defaultColDef={defaultColDef} columnDefs={colDef} />
       </div>
     </>
   )
