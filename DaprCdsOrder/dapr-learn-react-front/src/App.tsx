@@ -5,6 +5,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 import { useState } from 'react';
 import { Forecast, getDefaultForecasts } from './Forecast';
 import { TFixedArray } from './types';
+import { MonthHeaderComponent, MonthHeaderComponentExtraProps } from './MonthHeaderComponent';
 
 type ForecastColDef = ColDef<Forecast>;
 
@@ -29,7 +30,10 @@ function getForecastMonthlyColDef(): TFixedArray<ForecastColDef, 12> {
       valueGetter: (params) => {
         return params.data?.forecasts[i] ?? 0
       },
-      headerName: months[i]
+      headerComponent: MonthHeaderComponent,
+      headerComponentParams: {
+        month: months[i]
+      } satisfies MonthHeaderComponentExtraProps
     });
   }
 
