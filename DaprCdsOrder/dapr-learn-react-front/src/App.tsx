@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Forecast, getDefaultForecasts } from './Forecast';
 import { TFixedArray } from './types';
 import { MonthHeaderComponent, MonthHeaderComponentExtraProps } from './MonthHeaderComponent';
+import { UpdateForecastInput } from './ForecastMutationsInput';
 
 type ForecastColDef = ColDef<Forecast>;
 
@@ -30,9 +31,24 @@ function getForecastMonthlyColDef(): TFixedArray<ForecastColDef, 12> {
       valueGetter: (params) => {
         return params.data?.forecasts[i] ?? 0
       },
+      editable: true,
+      valueSetter: (params) => {
+        params.data.forecasts[i] = params.newValue;
+
+        const input: UpdateForecastInput = {
+          artistName: params.data.artistName,
+          costume: params.data.costume,
+          monthIndex: i,
+          newForecast: params.newValue
+        }
+        console.log(JSON.stringify(input))
+
+        return true;
+      },
       headerComponent: MonthHeaderComponent,
       headerComponentParams: {
-        month: months[i]
+        month: months[i],
+        monthId: i
       } satisfies MonthHeaderComponentExtraProps
     });
   }
